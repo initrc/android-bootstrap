@@ -1,3 +1,7 @@
+# AS
+.idea/
+gradlew.bat
+
 # Built application files
 *.apk
 *.ap_
