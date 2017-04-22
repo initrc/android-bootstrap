@@ -17,20 +17,24 @@ class HomePresenter (_feedList: RecyclerView) : Presenter {
     val feedAdapter = FeedAdapter()
     val disposables = CompositeDisposable()
 
+    companion object Feature {
+        val editors = "editors"
+    }
+
     init {
         feedList.adapter = feedAdapter
     }
 
     override fun onBind() {
-        disposables.add(loadPhotos())
+        disposables.add(loadPhotos(Feature.editors))
     }
 
     override fun onUnbind() {
         disposables.clear()
     }
 
-    fun loadPhotos() : Disposable {
-        return PhotoRepo.getPhotos()
+    fun loadPhotos(feature: String) : Disposable {
+        return PhotoRepo.getPhotos(feature)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
