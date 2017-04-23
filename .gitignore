@@ -1,3 +1,6 @@
+# API secrets
+app/src/main/java/io/github/initrc/bootstrap/api/ApiSecrets.kt
+
 # AS
 .idea/
 gradlew.bat
