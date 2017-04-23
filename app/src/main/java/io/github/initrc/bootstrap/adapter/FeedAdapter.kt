@@ -1,9 +1,9 @@
 package io.github.initrc.bootstrap.adapter
 
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import util.inflate
 
 /**
  * Feed adapter.
@@ -12,8 +12,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
     var data = mutableListOf<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val tv = LayoutInflater.from(parent?.context)
-                .inflate(android.R.layout.simple_list_item_1, parent, false) as TextView
+        val tv = parent?.inflate(android.R.layout.simple_list_item_1) as TextView
         return ViewHolder(tv)
     }
 
