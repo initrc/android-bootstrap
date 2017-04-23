@@ -22,6 +22,15 @@ class HomeView : FrameLayout {
         inflate(R.layout.view_home, true)
         feedList.layoutManager = LinearLayoutManager(context)
         presenter = HomePresenter(feedList)
-        presenter.loadFeed()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        presenter.onBind()
+    }
+
+    override fun onDetachedFromWindow() {
+        presenter.onUnbind()
+        super.onDetachedFromWindow()
     }
 }
