@@ -2,20 +2,24 @@ package io.github.initrc.bootstrap.repo
 
 import io.github.initrc.bootstrap.api.PhotoApi
 import io.github.initrc.bootstrap.model.Photo
+import io.github.initrc.bootstrap.model.PhotoResponse
 import io.reactivex.Observable
 
 /**
  * Photo repo.
  */
 object PhotoRepo {
-    fun getPhotos(feature: String) : Observable<List<Photo>> {
+    fun getPhotos(feature: String, page: Int) : Observable<PhotoResponse> {
         return Observable.create {
             subscriber ->
-            val response = PhotoApi.getPhotos(feature).execute()
+            val response = PhotoApi.getPhotos(feature, page).execute()
             if (response.isSuccessful) {
-                val photos = response.body().photos.map { Photo(it.name, it.images) }
-                subscriber.onNext(photos)
-                subscriber.onComplete()
+                response.body().let {
+                    val photos = it.photos.map { Photo(it.name, it.images) }
+                    val photoResponse = PhotoResponse(it.current_page, it.total_pages, photos)
+                    subscriber.onNext(photoResponse)
+                    subscriber.onComplete()
+                }
             } else {
                 subscriber.onError(Throwable(response.message()))
             }

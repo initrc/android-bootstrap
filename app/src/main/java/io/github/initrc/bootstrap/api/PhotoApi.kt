@@ -18,7 +18,7 @@ object PhotoApi {
         photoService = retrofit.create(PhotoService::class.java)
     }
 
-    fun getPhotos(feature: String): Call<PhotoResponse> {
-        return photoService.getPhotos(feature)
+    fun getPhotos(feature: String, page: Int): Call<PhotoResponse> {
+        return photoService.getPhotos(feature, page)
     }
 }

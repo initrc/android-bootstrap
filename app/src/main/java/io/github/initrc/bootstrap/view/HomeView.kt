@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import io.github.initrc.bootstrap.R
 import io.github.initrc.bootstrap.presenter.HomePresenter
 import io.github.initrc.bootstrap.view.decoration.HorizontalEqualSpaceItemDecoration
+import io.github.initrc.bootstrap.view.listener.InfiniteGridScrollListener
 import kotlinx.android.synthetic.main.view_home.view.*
 import util.GridUtils
 import util.inflate
@@ -27,6 +28,10 @@ class HomeView : FrameLayout {
         feedList.addItemDecoration(HorizontalEqualSpaceItemDecoration(
                 resources.getDimension(R.dimen.margin).toInt()))
         presenter = HomePresenter(feedList)
+        feedList.clearOnScrollListeners()
+        feedList.addOnScrollListener(
+                InfiniteGridScrollListener(feedList.layoutManager as StaggeredGridLayoutManager)
+                { presenter.loadPhotos() })
     }
 
     override fun onAttachedToWindow() {

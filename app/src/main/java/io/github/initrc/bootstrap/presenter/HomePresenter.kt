@@ -16,6 +16,8 @@ class HomePresenter (_feedList: RecyclerView) : Presenter {
     val feedList = _feedList
     val feedAdapter = FeedAdapter()
     val disposables = CompositeDisposable()
+    var feature = Feature.popular
+    var nextPage = 1
 
     companion object Feature {
         val popular = "popular"
@@ -27,19 +29,21 @@ class HomePresenter (_feedList: RecyclerView) : Presenter {
     }
 
     override fun onBind() {
-        disposables.add(loadPhotos(Feature.popular))
+        disposables.add(loadPhotos())
     }
 
     override fun onUnbind() {
         disposables.clear()
     }
 
-    fun loadPhotos(feature: String) : Disposable {
-        return PhotoRepo.getPhotos(feature)
+    fun loadPhotos() : Disposable {
+        return PhotoRepo.getPhotos(feature, nextPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { photos -> feedAdapter.addPhotos(photos) },
+                    { photoResponse ->
+                        nextPage = photoResponse.current_page + 1
+                        feedAdapter.addPhotos(photoResponse.photos) },
                     { error -> feedList.snack(error.message) }
                 )
     }

@@ -11,9 +11,9 @@ import retrofit2.http.Query
 interface PhotoService {
     @GET("photos")
     fun getPhotos(@Query("feature") feature: String,
+                  @Query("page") page: Int,
                   @Query("exclude") exclude: String = ApiConstants.exclude,
                   @Query("image_size") imageSize: Int = ApiConstants.defaultImageSize,
-                  @Query("page") page: Int = 1,
                   @Query("consumer_key") consumerKey: String = ApiSecrets.consumerKey)
             : Call<PhotoResponse>
 }
