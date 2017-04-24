@@ -1,11 +1,12 @@
 package io.github.initrc.bootstrap.view
 
 import android.content.Context
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import io.github.initrc.bootstrap.R
 import io.github.initrc.bootstrap.presenter.HomePresenter
+import io.github.initrc.bootstrap.view.decoration.HorizontalEqualSpaceItemDecoration
 import kotlinx.android.synthetic.main.view_home.view.*
 import util.inflate
 
@@ -20,7 +21,9 @@ class HomeView : FrameLayout {
 
     init {
         inflate(R.layout.view_home, true)
-        feedList.layoutManager = LinearLayoutManager(context)
+        feedList.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        feedList.addItemDecoration(HorizontalEqualSpaceItemDecoration(
+                resources.getDimension(R.dimen.margin).toInt()))
         presenter = HomePresenter(feedList)
     }
 
