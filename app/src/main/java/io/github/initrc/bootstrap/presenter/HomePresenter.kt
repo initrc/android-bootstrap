@@ -18,6 +18,7 @@ class HomePresenter (_feedList: RecyclerView) : Presenter {
     val disposables = CompositeDisposable()
 
     companion object Feature {
+        val popular = "popular"
         val editors = "editors"
     }
 
@@ -26,7 +27,7 @@ class HomePresenter (_feedList: RecyclerView) : Presenter {
     }
 
     override fun onBind() {
-        disposables.add(loadPhotos(Feature.editors))
+        disposables.add(loadPhotos(Feature.popular))
     }
 
     override fun onUnbind() {
