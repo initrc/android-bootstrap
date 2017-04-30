@@ -1,5 +1,8 @@
 package util
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
+import android.animation.AnimatorSet
 import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
@@ -20,4 +23,13 @@ fun View.snack(text: CharSequence?, duration: Int = Snackbar.LENGTH_LONG) {
 
 fun ImageView.loadUrl(url: String) {
     Glide.with(this.context).load(url).crossFade().into(this)
+}
+
+fun AnimatorSet.onAnimationEnd(end: () -> Unit) {
+    addListener(object: AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {}
+        override fun onAnimationEnd(animation: Animator?) { end() }
+        override fun onAnimationCancel(animation: Animator?) { end() }
+        override fun onAnimationStart(animation: Animator?) {}
+    })
 }

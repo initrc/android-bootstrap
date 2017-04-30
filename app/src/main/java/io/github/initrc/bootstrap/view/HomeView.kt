@@ -9,7 +9,9 @@ import io.github.initrc.bootstrap.R
 import io.github.initrc.bootstrap.presenter.HomePresenter
 import io.github.initrc.bootstrap.view.decoration.HorizontalEqualSpaceItemDecoration
 import io.github.initrc.bootstrap.view.listener.InfiniteGridScrollListener
+import io.github.initrc.bootstrap.view.listener.VerticalScrollListener
 import kotlinx.android.synthetic.main.view_home.view.*
+import util.AnimationUtils
 import util.DeviceUtils
 import util.GridUtils
 import util.inflate
@@ -30,11 +32,13 @@ class HomeView : FrameLayout {
         feedList.layoutManager = StaggeredGridLayoutManager(
                 GridUtils.getGridColumnCount(resources), StaggeredGridLayoutManager.VERTICAL)
         feedList.addItemDecoration(HorizontalEqualSpaceItemDecoration(padding))
-        presenter = HomePresenter(feedList, getGridColumnWidthPx(gridColumnCount, padding))
+        presenter = HomePresenter(feedList, getGridColumnWidthPx(gridColumnCount, padding), homeFab)
         feedList.clearOnScrollListeners()
         feedList.addOnScrollListener(
                 InfiniteGridScrollListener(feedList.layoutManager as StaggeredGridLayoutManager)
                 { presenter.loadPhotos() })
+        feedList.addOnScrollListener(VerticalScrollListener(
+                { AnimationUtils.hideFab(homeFab) }, { AnimationUtils.showFab(homeFab) }))
     }
 
     override fun onAttachedToWindow() {
