@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/m6">
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/photoIv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/greyF"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        app:riv_corner_radius="@dimen/m2"
+        app:riv_mutate_background="true"/>
     <TextView
         android:id="@+id/nameTv"
         android:layout_width="match_parent"
