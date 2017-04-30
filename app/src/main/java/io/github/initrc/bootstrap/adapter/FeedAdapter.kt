@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import io.github.initrc.bootstrap.R
 import io.github.initrc.bootstrap.model.Photo
 import util.inflate
+import util.loadUrl
 
 /**
  * Feed adapter.
@@ -31,7 +31,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
         val photo: Photo? = items.getOrNull(position)
         photo?.images?.getOrNull(0)?.let {
             measurePhoto(holder?.photoIv!!, photo?.width, photo?.height)
-            Glide.with(holder?.photoIv?.context).load(it.url).crossFade().into(holder?.photoIv)
+            holder?.photoIv?.loadUrl(it.url)
         }
         holder?.nameTv?.text = photo?.name
     }
