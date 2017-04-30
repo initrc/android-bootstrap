@@ -18,9 +18,10 @@
         android:id="@+id/nameTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/m2"
+        android:layout_marginTop="@dimen/m1"
         android:layout_marginLeft="@dimen/m1"
         android:layout_marginRight="@dimen/m1"
         android:textColor="@color/text"
-        android:textSize="@dimen/t3"/>
+        android:textSize="@dimen/t4"
+        android:textStyle="bold"/>
 </LinearLayout>

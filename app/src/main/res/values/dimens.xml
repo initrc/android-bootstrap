@@ -9,4 +9,5 @@
     <dimen name="t1">9sp</dimen>
     <dimen name="t2">10sp</dimen>
     <dimen name="t3">12sp</dimen>
+    <dimen name="t4">14sp</dimen>
 </resources>
