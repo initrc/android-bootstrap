@@ -12,7 +12,7 @@ import util.snack
 /**
  * Presenter for home view.
  */
-class HomePresenter (_feedList: RecyclerView) : Presenter {
+class HomePresenter (_feedList: RecyclerView, gridColumnWidth: Int) : Presenter {
     val feedList = _feedList
     val feedAdapter = FeedAdapter()
     val disposables = CompositeDisposable()
@@ -25,6 +25,7 @@ class HomePresenter (_feedList: RecyclerView) : Presenter {
     }
 
     init {
+        feedAdapter.gridColumnWidth = gridColumnWidth
         feedList.adapter = feedAdapter
     }
 

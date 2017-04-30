@@ -15,6 +15,7 @@ import util.inflate
  */
 class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
     var items = mutableListOf<Photo>()
+    var gridColumnWidth = 0
 
     fun addPhotos(photos: List<Photo>) {
         items.addAll(photos)
@@ -28,9 +29,9 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val photo: Photo? = items.getOrNull(position)
-        photo?.images?.getOrNull(0)?.url?.let {
-            Glide.with(holder?.photoIv?.context).load(it)
-                    .error(android.R.drawable.stat_sys_download).crossFade().into(holder?.photoIv)
+        photo?.images?.getOrNull(0)?.let {
+            measurePhoto(holder?.photoIv!!, photo?.width, photo?.height)
+            Glide.with(holder?.photoIv?.context).load(it.url).crossFade().into(holder?.photoIv)
         }
         holder?.nameTv?.text = photo?.name
     }
@@ -42,5 +43,12 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val photoIv = itemView.findViewById(R.id.photoIv) as ImageView
         val nameTv = itemView.findViewById(R.id.nameTv) as TextView
+    }
+
+    private fun measurePhoto(view: View, width: Int, height: Int) {
+        if (width == 0 || height == 0) { return }
+        view.layoutParams.width = gridColumnWidth
+        view.layoutParams.height = height * gridColumnWidth / width
+        view.requestLayout()
     }
 }
