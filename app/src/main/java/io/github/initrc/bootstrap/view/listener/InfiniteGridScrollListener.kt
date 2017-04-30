@@ -12,7 +12,7 @@ class InfiniteGridScrollListener(
     var prevTotalCount = 0
     var totalCount = 0
     var visibleCount = 0
-    val visibleThreshold = layoutManager.spanCount * 3
+    val visibleThreshold = layoutManager.spanCount * 5
     var loading = true
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
