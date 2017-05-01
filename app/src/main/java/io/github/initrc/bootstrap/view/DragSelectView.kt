@@ -44,11 +44,12 @@ class DragSelectView : RelativeLayout {
     }
 
     fun show() {
-        AnimationUtils.show(this)
+        visibility = View.VISIBLE
+        AnimationUtils.slideFromRight(items)
     }
 
     fun hide() {
-        AnimationUtils.hide(this)
+        AnimationUtils.slideToRight(items) { visibility = View.GONE }
         onDismiss?.invoke()
     }
 
