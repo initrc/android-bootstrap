@@ -19,13 +19,9 @@ class HomePresenter (_feedList: RecyclerView, gridColumnWidth: Int, _homeFab: Vi
     val homeFab = _homeFab
     val feedAdapter = FeedAdapter()
     val disposables = CompositeDisposable()
-    var feature = Feature.popular
+    val features = mutableListOf<String>("popular", "editors", "upcoming", "fresh_today")
+    var currentFeature = features[0]
     var nextPage = 1
-
-    companion object Feature {
-        val popular = "popular"
-        val editors = "editors"
-    }
 
     init {
         feedAdapter.gridColumnWidth = gridColumnWidth
@@ -40,7 +36,16 @@ class HomePresenter (_feedList: RecyclerView, gridColumnWidth: Int, _homeFab: Vi
         disposables.clear()
     }
 
-    fun loadPhotos() : Disposable {
+    fun refreshPhotos(feature: String) {
+        if (currentFeature.equals(feature)) return
+        feedAdapter.clear()
+        nextPage = 1
+        loadPhotos(feature)
+    }
+
+    fun loadPhotos(feature: String = currentFeature) : Disposable {
+        val featureChange = !currentFeature.equals(feature)
+        currentFeature = feature
         return PhotoRepo.getPhotos(feature, nextPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,6 +53,7 @@ class HomePresenter (_feedList: RecyclerView, gridColumnWidth: Int, _homeFab: Vi
                     { photoResponse ->
                         nextPage = photoResponse.current_page + 1
                         feedAdapter.addPhotos(photoResponse.photos)
+                        if (featureChange) feedList.smoothScrollToPosition(0)
                         if (photoResponse.current_page == 1) AnimationUtils.showFab(homeFab)
                     },
                     { error -> feedList.snack(error.message) }

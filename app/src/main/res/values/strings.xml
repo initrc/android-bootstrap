@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Bootstrap</string>
+    <string name="popular">Popular</string>
+    <string name="editors">Editors</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="fresh">Fresh</string>
 </resources>

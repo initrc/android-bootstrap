@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/homeRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/feedList"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/m3"/>
-    <android.support.design.widget.FloatingActionButton
-        style="@style/fab"
-        android:id="@+id/homeFab"
-        android:src="@mipmap/ic_launcher"
-        android:visibility="gone"/>
-</RelativeLayout>
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/feedList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/m3"/>
+        <android.support.design.widget.FloatingActionButton
+            style="@style/fab"
+            android:id="@+id/homeFab"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="gone"/>
+    </RelativeLayout>
+</FrameLayout>

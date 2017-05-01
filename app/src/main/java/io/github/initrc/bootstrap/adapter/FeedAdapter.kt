@@ -40,6 +40,11 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
         return items.size
     }
 
+    fun clear() {
+        items.clear()
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val photoIv = itemView.findViewById(R.id.photoIv) as ImageView
         val nameTv = itemView.findViewById(R.id.nameTv) as TextView

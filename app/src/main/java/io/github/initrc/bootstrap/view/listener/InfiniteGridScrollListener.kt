@@ -24,7 +24,7 @@ class InfiniteGridScrollListener(
         layoutManager.findFirstVisibleItemPositions(firstVisiblePos)
 
         if (loading) {
-            if (totalCount > prevTotalCount) {
+            if (totalCount != prevTotalCount) {
                 prevTotalCount = totalCount
                 loading = false
             }
