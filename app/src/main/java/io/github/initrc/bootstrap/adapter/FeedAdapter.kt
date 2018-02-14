@@ -30,8 +30,8 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val photo: Photo? = items.getOrNull(position)
         photo?.images?.getOrNull(0)?.let {
-            measurePhoto(holder?.photoIv!!, photo?.width, photo?.height)
-            holder?.photoIv?.loadUrl(it.url)
+            measurePhoto(holder?.photoIv!!, photo.width, photo.height)
+            holder.photoIv?.loadUrl(it.url)
         }
         holder?.nameTv?.text = photo?.name
     }
@@ -46,8 +46,8 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val photoIv = itemView.findViewById(R.id.photoIv) as ImageView
-        val nameTv = itemView.findViewById(R.id.nameTv) as TextView
+        val photoIv = itemView.findViewById<ImageView>(R.id.photoIv)
+        val nameTv = itemView.findViewById<TextView>(R.id.nameTv)
     }
 
     private fun measurePhoto(view: View, width: Int, height: Int) {
