@@ -16,9 +16,9 @@ import util.AnimationUtils
 import util.setTextSizeFromDimen
 
 /**
- * Drag and release to select.
+ * A view that slides in and let you select.
  */
-class DragSelectView : RelativeLayout {
+class SlideSelectView : RelativeLayout {
     val items = ArrayList<TextView>()
     var onClickListeners = ArrayList<OnClickListener>()
     private var onDismiss: (() -> Unit)? = null
@@ -82,8 +82,8 @@ class DragSelectView : RelativeLayout {
             return this
         }
 
-        fun build(): DragSelectView {
-            val rootView = DragSelectView(context)
+        fun build(): SlideSelectView {
+            val rootView = SlideSelectView(context)
             val rootLp = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             rootLp.addRule(ALIGN_PARENT_RIGHT)
             rootLp.addRule(CENTER_VERTICAL)

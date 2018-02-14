@@ -42,17 +42,17 @@ class HomeView : FrameLayout {
         feedList.addOnScrollListener(VerticalScrollListener(
                 { AnimationUtils.hideFab(homeFab) }, { AnimationUtils.showFab(homeFab) }))
 
-        // drag select view
-        val dragSelectViewBuilder = DragSelectView.Builder(context)
+        // slide select view
+        val slideSelectViewBuilder = SlideSelectView.Builder(context)
                 .setSelectedIndex(presenter.features.indexOf(presenter.currentFeature))
                 .setOnDismiss {
                     AnimationUtils.showFab(homeFab)
                 }
         for (feature in presenter.features) {
-            dragSelectViewBuilder.addItem(getFeatureName(feature),
+            slideSelectViewBuilder.addItem(getFeatureName(feature),
                     View.OnClickListener{ presenter.refreshPhotos(feature) })
         }
-        val dragSelectView = dragSelectViewBuilder.build()
+        val dragSelectView = slideSelectViewBuilder.build()
         dragSelectView.visibility = View.GONE
         homeRootView.addView(dragSelectView, FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
 
