@@ -14,7 +14,7 @@ import util.loadUrl
  * Feed adapter.
  */
 class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
-    var items = mutableListOf<Photo>()
+    private var items = mutableListOf<Photo>()
     var gridColumnWidth = 0
 
     fun addPhotos(photos: List<Photo>) {

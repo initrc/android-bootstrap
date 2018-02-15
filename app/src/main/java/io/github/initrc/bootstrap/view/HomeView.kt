@@ -22,7 +22,7 @@ import util.inflate
  * Home view.
  */
 class HomeView : FrameLayout {
-    val presenter: HomePresenter
+    private val presenter: HomePresenter
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)

@@ -48,7 +48,7 @@ class SlideSelectView : RelativeLayout {
         AnimationUtils.slideFromRight(items)
     }
 
-    fun hide() {
+    private fun hide() {
         AnimationUtils.slideToRight(items) { visibility = View.GONE }
         onDismiss?.invoke()
     }

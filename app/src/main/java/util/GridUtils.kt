@@ -8,13 +8,13 @@ import io.github.initrc.bootstrap.R
  * Grid utils.
  */
 object GridUtils {
-    val gridColumnCountLandscapeRatio = 1.5f
+    private const val gridColumnCountLandscapeRatio = 1.5f
 
     fun getGridColumnCount(resources: Resources) : Int {
         val col = resources.getInteger(R.integer.gridColumnCount)
-        when (resources.configuration.orientation) {
-            ORIENTATION_LANDSCAPE -> return Math.round(col * gridColumnCountLandscapeRatio)
-            else -> return col
+        return when (resources.configuration.orientation) {
+            ORIENTATION_LANDSCAPE -> Math.round(col * gridColumnCountLandscapeRatio)
+            else -> col
         }
     }
 }

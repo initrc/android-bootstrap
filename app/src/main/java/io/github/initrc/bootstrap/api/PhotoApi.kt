@@ -9,7 +9,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * 500px photo API.
  */
 object PhotoApi {
-    val photoService: PhotoService
+    private val photoService: PhotoService
     init {
         val retrofit = Retrofit.Builder()
                 .baseUrl(ApiConstants.baseUrl)

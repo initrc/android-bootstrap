@@ -15,10 +15,10 @@ import util.snack
  * Presenter for home view.
  */
 class HomePresenter (_feedList: RecyclerView, gridColumnWidth: Int, _homeFab: View) : Presenter {
-    val feedList = _feedList
-    val homeFab = _homeFab
-    val feedAdapter = FeedAdapter()
-    val disposables = CompositeDisposable()
+    private val feedList = _feedList
+    private val homeFab = _homeFab
+    private val feedAdapter = FeedAdapter()
+    private val disposables = CompositeDisposable()
     val features = mutableListOf<String>("popular", "editors", "upcoming", "fresh_today")
     var currentFeature = features[0]
     var nextPage = 1
