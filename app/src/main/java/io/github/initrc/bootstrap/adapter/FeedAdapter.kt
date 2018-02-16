@@ -16,6 +16,7 @@ import util.loadUrl
 class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
     private var items = mutableListOf<Photo>()
     var gridColumnWidth = 0
+    var imageOnly = false
 
     fun addPhotos(photos: List<Photo>) {
         items.addAll(photos)
@@ -34,6 +35,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
             holder.photoIv?.loadUrl(it.url)
         }
         holder?.nameTv?.text = photo?.name
+        holder?.nameTv?.visibility = if (imageOnly) View.GONE else View.VISIBLE
     }
 
     override fun getItemCount(): Int {

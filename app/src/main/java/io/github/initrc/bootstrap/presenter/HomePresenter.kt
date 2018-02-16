@@ -59,4 +59,12 @@ class HomePresenter (_feedList: RecyclerView, gridColumnWidth: Int, _homeFab: Vi
                     { error -> feedList.snack(error.message) }
                 )
     }
+
+    fun setGridColumnWidth(width: Int) {
+        feedAdapter.gridColumnWidth = width
+    }
+
+    fun setImageOnly(imageOnly: Boolean) {
+        feedAdapter.imageOnly = imageOnly
+    }
 }

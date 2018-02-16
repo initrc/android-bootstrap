@@ -4,18 +4,21 @@ import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
+import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import io.github.initrc.bootstrap.R
+import io.github.initrc.bootstrap.presenter.ColumnCountType
+import io.github.initrc.bootstrap.presenter.ColumnPresenter
 import io.github.initrc.bootstrap.presenter.HomePresenter
 import io.github.initrc.bootstrap.view.decoration.HorizontalEqualSpaceItemDecoration
 import io.github.initrc.bootstrap.view.listener.InfiniteGridScrollListener
 import io.github.initrc.bootstrap.view.listener.VerticalScrollListener
 import kotlinx.android.synthetic.main.view_home.view.*
 import util.AnimationUtils
-import util.DeviceUtils
-import util.GridUtils
 import util.inflate
 
 /**
@@ -23,24 +26,40 @@ import util.inflate
  */
 class HomeView : FrameLayout {
     private val presenter: HomePresenter
+    private val columnPresenter: ColumnPresenter
+    private val scaleGestureDetector: ScaleGestureDetector
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     init {
         inflate(R.layout.view_home, true)
-        val gridColumnCount = resources.getInteger(R.integer.gridColumnCount)
-        val padding = resources.getDimension(R.dimen.margin).toInt()
+        // dynamic columns
+        columnPresenter = ColumnPresenter(context as Activity)
+        val gridColumnCount = columnPresenter.getDynamicGridColumnCount()
+        presenter = HomePresenter(feedList, columnPresenter.getGridColumnWidthPx(), homeFab)
+        columnPresenter.setOnColumnUpdateCallback { columnCount ->
+            presenter.setGridColumnWidth(columnPresenter.getGridColumnWidthPx())
+            presenter.setImageOnly(columnPresenter.columnCountType.ordinal > ColumnCountType.STANDARD.ordinal)
+            (feedList.layoutManager as StaggeredGridLayoutManager).spanCount = columnCount
+            feedList.adapter.notifyItemRangeChanged(0, feedList.adapter.itemCount)
+        }
+        scaleGestureDetector = ScaleGestureDetector(context, ScaleListener(columnPresenter))
+
+        // feed
         feedList.layoutManager = StaggeredGridLayoutManager(
-                GridUtils.getGridColumnCount(resources), StaggeredGridLayoutManager.VERTICAL)
-        feedList.addItemDecoration(HorizontalEqualSpaceItemDecoration(padding))
-        presenter = HomePresenter(feedList, getGridColumnWidthPx(gridColumnCount, padding), homeFab)
+                gridColumnCount, StaggeredGridLayoutManager.VERTICAL)
+        feedList.addItemDecoration(HorizontalEqualSpaceItemDecoration(columnPresenter.gridPadding))
         feedList.clearOnScrollListeners()
         feedList.addOnScrollListener(
                 InfiniteGridScrollListener(feedList.layoutManager as StaggeredGridLayoutManager)
                 { presenter.loadPhotos() })
         feedList.addOnScrollListener(VerticalScrollListener(
                 { AnimationUtils.hideFab(homeFab) }, { AnimationUtils.showFab(homeFab) }))
+        feedList.setOnTouchListener({ _: View, event: MotionEvent ->
+            scaleGestureDetector.onTouchEvent(event)
+            event.pointerCount > 1 // don't scroll while performing multi-finger gestures
+        })
 
         // slide select view
         val slideSelectViewBuilder = SlideSelectView.Builder(context)
@@ -73,12 +92,6 @@ class HomeView : FrameLayout {
         super.onDetachedFromWindow()
     }
 
-    private fun getGridColumnWidthPx(gridColumnCount: Int, padding: Int): Int {
-        val paddingCount = gridColumnCount + 1
-        val screenWidth = DeviceUtils.getScreenWidthPx(context as Activity)
-        return (screenWidth - padding * paddingCount) / gridColumnCount
-    }
-
     private fun getFeatureName(feature: String): String {
         when (feature) {
             presenter.features[0] -> return context.getString(R.string.popular)
@@ -88,4 +101,16 @@ class HomeView : FrameLayout {
         }
         return ""
     }
+
+    class ScaleListener(private val columnPresenter: ColumnPresenter) : SimpleOnScaleGestureListener() {
+        override fun onScaleEnd(detector: ScaleGestureDetector?) {
+            super.onScaleEnd(detector)
+            if (detector == null) return
+            if (detector.scaleFactor < 1) {
+                columnPresenter.increaseCount()
+            } else if (detector.scaleFactor > 1) {
+                columnPresenter.decreaseCount()
+            }
+        }
+   }
 }

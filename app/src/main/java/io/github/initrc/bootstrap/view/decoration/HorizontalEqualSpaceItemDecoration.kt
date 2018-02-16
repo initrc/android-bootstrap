@@ -8,7 +8,7 @@ import android.view.View
  * Equal space item decoration for grid view.
  */
 class HorizontalEqualSpaceItemDecoration(space: Int) : RecyclerView.ItemDecoration() {
-    private val halfSpace = space / 2
+    private var halfSpace = space / 2
 
     override fun getItemOffsets(
             outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
@@ -19,5 +19,9 @@ class HorizontalEqualSpaceItemDecoration(space: Int) : RecyclerView.ItemDecorati
 
         outRect?.left = halfSpace
         outRect?.right = halfSpace
+    }
+
+    fun setSpace(space: Int) {
+        halfSpace = space / 2
     }
 }
