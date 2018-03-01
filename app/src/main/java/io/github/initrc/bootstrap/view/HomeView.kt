@@ -44,7 +44,7 @@ class HomeView : FrameLayout {
             (feedList.layoutManager as StaggeredGridLayoutManager).spanCount = columnCount
             feedList.adapter.notifyItemRangeChanged(0, feedList.adapter.itemCount)
         }
-        scaleGestureDetector = ScaleGestureDetector(context, ScaleListener(columnPresenter))
+        scaleGestureDetector = ScaleGestureDetector(context, ScaleListener(columnPresenter, feedList))
 
         // feed
         feedList.layoutManager = StaggeredGridLayoutManager(
@@ -102,15 +102,62 @@ class HomeView : FrameLayout {
         return ""
     }
 
-    class ScaleListener(private val columnPresenter: ColumnPresenter) : SimpleOnScaleGestureListener() {
+    class ScaleListener(private val columnPresenter: ColumnPresenter, private val view: View)
+            : SimpleOnScaleGestureListener() {
+        private var previousSpan = 1f
+        private var scaleFactor = 1f
+        private val scaleThreshold = 0.3f
+        private val ignoreScaleThreshold = 25
+        private var ignoreScaleCount = 0 // workaround to ignore buggy scale events
+        override fun onScale(detector: ScaleGestureDetector?): Boolean {
+            if (detector == null) return false
+            if (ignoreScaleCount > 0) {
+                ignoreScaleCount--
+                return false
+            }
+            var delta: Int
+            scaleFactor *= getScaleFactor(previousSpan, detector.currentSpan)
+            when {
+                scaleFactor < 1 - scaleThreshold -> delta = 1
+                scaleFactor > 1 + scaleThreshold -> delta = -1
+                else -> {
+                    delta = 0
+                    scaleView(view, scaleFactor)
+                }
+            }
+            if (delta != 0) {
+                previousSpan = detector.currentSpan
+                columnPresenter.adjustCount(delta)
+                scaleFactor = 1f
+                scaleView(view, scaleFactor)
+                ignoreScaleCount = ignoreScaleThreshold
+            }
+            return true
+        }
+
+        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+            scaleFactor = 1f
+            previousSpan = detector?.currentSpan!!
+            return true
+        }
+
         override fun onScaleEnd(detector: ScaleGestureDetector?) {
-            super.onScaleEnd(detector)
-            if (detector == null) return
-            if (detector.scaleFactor < 1) {
-                columnPresenter.increaseCount()
-            } else if (detector.scaleFactor > 1) {
-                columnPresenter.decreaseCount()
+            scaleFactor = 1f
+            scaleView(view, scaleFactor)
+        }
+
+        private fun getScaleFactor(previousSpan: Float, currentSpan: Float): Float {
+            return if (previousSpan > 0 && currentSpan > 0) {
+                currentSpan / previousSpan
+            } else {
+                1.0f
             }
         }
-   }
+
+        private fun scaleView(view: View, scaleFactor: Float) {
+            view.scaleX = scaleFactor
+            view.scaleY = scaleFactor
+            view.alpha = 1 - Math.abs(scaleFactor - 1)
+        }
+    }
 }

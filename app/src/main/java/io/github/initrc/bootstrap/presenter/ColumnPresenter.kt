@@ -29,18 +29,17 @@ class ColumnPresenter(private val activity: Activity) {
         return (screenWidth - gridPadding * paddingCount) / gridColumnCount
     }
 
-    fun increaseCount() {
-        if (columnCountType.ordinal < ColumnCountType.values().size - 1) {
-            columnCountType = ColumnCountType.values()[columnCountType.ordinal + 1]
+    /**
+     * @return True if the count is adjusted.
+     */
+    fun adjustCount(delta: Int): Boolean {
+        if (delta == 0) return false
+        if (columnCountType.ordinal + delta in 0 until ColumnCountType.values().size) {
+            columnCountType = ColumnCountType.values()[columnCountType.ordinal + delta]
             onColumnUpdate(getDynamicGridColumnCount())
+            return true
         }
-    }
-
-    fun decreaseCount() {
-        if (columnCountType.ordinal > 0) {
-            columnCountType = ColumnCountType.values()[columnCountType.ordinal - 1]
-            onColumnUpdate(getDynamicGridColumnCount())
-        }
+        return false
     }
 
     fun setOnColumnUpdateCallback(func: (Int) -> Unit) {
