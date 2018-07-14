@@ -13,7 +13,7 @@ class HorizontalEqualSpaceItemDecoration(space: Int) : RecyclerView.ItemDecorati
     override fun getItemOffsets(
             outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
         if (parent?.paddingLeft != halfSpace) {
-            parent?.setPadding(halfSpace, parent?.paddingTop, halfSpace, parent.paddingBottom)
+            parent?.setPadding(halfSpace, parent.paddingTop, halfSpace, parent.paddingBottom)
             parent?.clipToPadding = false
         }
 

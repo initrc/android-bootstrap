@@ -23,19 +23,19 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
         notifyItemRangeChanged(itemCount - photos.size, photos.size)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val itemView = parent?.inflate(R.layout.view_photo_item)
-        return ViewHolder(itemView!!)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val itemView = parent.inflate(R.layout.view_photo_item)
+        return ViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val photo: Photo? = items.getOrNull(position)
         photo?.images?.getOrNull(0)?.let {
-            measurePhoto(holder?.photoIv!!, photo.width, photo.height)
-            holder.photoIv?.loadUrl(it.url)
+            measurePhoto(holder.photoIv!!, photo.width, photo.height)
+            holder.photoIv.loadUrl(it.url)
         }
-        holder?.nameTv?.text = photo?.name
-        holder?.nameTv?.visibility = if (imageOnly) View.GONE else View.VISIBLE
+        holder.nameTv?.text = photo?.name
+        holder.nameTv?.visibility = if (imageOnly) View.GONE else View.VISIBLE
     }
 
     override fun getItemCount(): Int {

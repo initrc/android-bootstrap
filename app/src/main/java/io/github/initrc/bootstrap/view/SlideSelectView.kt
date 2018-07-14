@@ -95,7 +95,7 @@ class SlideSelectView : RelativeLayout {
             val viewGroup = LinearLayout(context)
             viewGroup.orientation = LinearLayout.VERTICAL
             for (i in textList.indices) {
-                val view = buildItem(textList[i], onClickListeners[i])
+                val view = buildItem(textList[i])
                 TextDecorator.decorate(context, view, i == selectedIndex)
                 rootView.items.add(view)
                 viewGroup.addView(view, groupLp)
@@ -106,7 +106,7 @@ class SlideSelectView : RelativeLayout {
             return rootView
         }
 
-        private fun buildItem(text: CharSequence, listener: OnClickListener): TextView {
+        private fun buildItem(text: CharSequence): TextView {
             val view = TextView(context)
             val padding = context.resources.getDimension(R.dimen.margin).toInt()
             view.setPadding(padding * 4, padding, padding, padding)
