@@ -9,14 +9,14 @@ import io.reactivex.Observable
  * Photo repo.
  */
 object PhotoRepo {
-    fun getPhotos(feature: String, page: Int) : Observable<PhotoResponse> {
+    fun getPhotos(query: String, page: Int) : Observable<PhotoResponse> {
         return Observable.create {
             subscriber ->
-            val response = PhotoApi.getPhotos(feature, page).execute()
+            val response = PhotoApi.getPhotos(query, page).execute()
             if (response.isSuccessful) {
                 response.body().let {
-                    val photos = it.photos.map { Photo(it.name, it.width, it.height, it.images) }
-                    val photoResponse = PhotoResponse(it.current_page,  photos)
+                    val photos = it.hits.map { Photo(it.tags, it.imageWidth, it.imageHeight, it.largeImageURL, it.webformatURL) }
+                    val photoResponse = PhotoResponse(photos)
                     subscriber.onNext(photoResponse)
                     subscriber.onComplete()
                 }

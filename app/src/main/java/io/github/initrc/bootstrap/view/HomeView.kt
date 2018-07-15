@@ -56,10 +56,10 @@ class HomeView : FrameLayout {
                 { presenter.loadPhotos() })
         feedList.addOnScrollListener(VerticalScrollListener(
                 { AnimationUtils.hideFab(homeFab) }, { AnimationUtils.showFab(homeFab) }))
-        feedList.setOnTouchListener({ _: View, event: MotionEvent ->
+        feedList.setOnTouchListener { _: View, event: MotionEvent ->
             scaleGestureDetector.onTouchEvent(event)
             event.pointerCount > 1 // don't scroll while performing multi-finger gestures
-        })
+        }
 
         // slide select view
         val slideSelectViewBuilder = SlideSelectView.Builder(context)

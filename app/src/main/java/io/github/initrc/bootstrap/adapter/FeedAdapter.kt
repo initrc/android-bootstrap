@@ -30,11 +30,11 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val photo: Photo? = items.getOrNull(position)
-        photo?.images?.getOrNull(0)?.let {
-            measurePhoto(holder.photoIv!!, photo.width, photo.height)
-            holder.photoIv.loadUrl(it.url)
+        photo?.let {
+            measurePhoto(holder.photoIv, it.imageWidth, it.imageHeight)
+            holder.photoIv.loadUrl(it.webformatURL)
         }
-        holder.nameTv?.text = photo?.name
+        holder.nameTv?.text = photo?.tags
         holder.nameTv?.visibility = if (imageOnly) View.GONE else View.VISIBLE
     }
 

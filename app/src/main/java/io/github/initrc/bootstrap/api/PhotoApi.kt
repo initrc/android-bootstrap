@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 /**
- * 500px photo API.
+ * Pixabay photo API.
  */
 object PhotoApi {
     private val photoService: PhotoService
@@ -18,7 +18,7 @@ object PhotoApi {
         photoService = retrofit.create(PhotoService::class.java)
     }
 
-    fun getPhotos(feature: String, page: Int): Call<PhotoResponse> {
-        return photoService.getPhotos(feature, page)
+    fun getPhotos(query: String, page: Int): Call<PhotoResponse> {
+        return photoService.getPhotos(query, page)
     }
 }

@@ -19,9 +19,9 @@ class HomePresenter (_feedList: RecyclerView, gridColumnWidth: Int, _homeFab: Vi
     private val homeFab = _homeFab
     private val feedAdapter = FeedAdapter()
     private val disposables = CompositeDisposable()
-    val features = mutableListOf<String>("popular", "editors", "upcoming", "fresh_today")
+    private var nextPage = 1
+    val features = mutableListOf("popular", "editors", "upcoming", "fresh_today")
     var currentFeature = features[0]
-    var nextPage = 1
 
     init {
         feedAdapter.gridColumnWidth = gridColumnWidth
@@ -36,27 +36,23 @@ class HomePresenter (_feedList: RecyclerView, gridColumnWidth: Int, _homeFab: Vi
         disposables.clear()
     }
 
-    fun refreshPhotos(feature: String) {
-        if (currentFeature.equals(feature)) return
+    fun refreshPhotos(query: String) {
         feedAdapter.clear()
         nextPage = 1
-        loadPhotos(feature)
+        loadPhotos(query)
     }
 
-    fun loadPhotos(feature: String = currentFeature) : Disposable {
-        val featureChange = !currentFeature.equals(feature)
-        currentFeature = feature
-        return PhotoRepo.getPhotos(feature, nextPage)
+    fun loadPhotos(query: String = "", page: Int = nextPage) : Disposable {
+        return PhotoRepo.getPhotos(query, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { photoResponse ->
-                        nextPage = photoResponse.current_page + 1
-                        feedAdapter.addPhotos(photoResponse.photos)
-                        if (featureChange) feedList.smoothScrollToPosition(0)
-                        if (photoResponse.current_page == 1) AnimationUtils.showFab(homeFab)
-                    },
-                    { error -> feedList.snack(error.message) }
+                        {
+                            feedAdapter.addPhotos(it.hits)
+                            nextPage = page + 1
+                            if (page == 1) AnimationUtils.showFab(homeFab)
+                        },
+                        { error -> feedList.snack(error.message) }
                 )
     }
 

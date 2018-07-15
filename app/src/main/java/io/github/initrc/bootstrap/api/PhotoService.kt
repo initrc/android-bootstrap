@@ -6,14 +6,13 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 /**
- * 500px photo service.
+ * Pixabay photo service.
  */
 interface PhotoService {
-    @GET("photos")
-    fun getPhotos(@Query("feature") feature: String,
+    @GET("api")
+    fun getPhotos(@Query("q") query: String,
                   @Query("page") page: Int,
-                  @Query("exclude") exclude: String = ApiConstants.exclude,
-                  @Query("image_size") imageSize: Int = ApiConstants.defaultImageSize,
-                  @Query("consumer_key") consumerKey: String = ApiSecrets.consumerKey)
+                  @Query("editors_choice") editorsChoice: Boolean  = ApiConstants.editorsChoice,
+                  @Query("key") key: String = ApiSecrets.key)
             : Call<PhotoResponse>
 }
